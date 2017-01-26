@@ -386,46 +386,6 @@ for x in range(3, numOfSat, 1):
 print("")
 print(array)
 
-# a = 1
-# b = 2
-# c = 3
-# for time in range(1, int(duration/resolution)):
-#     print("{:<10}|{:<10}|{:<10}|{:<10}".format("  ", round(xyz[a][0][time], 2), round(xyz[b][0][time], 2), round(xyz[c][0][time], 2)))
-#     print("{:<10}|{:<10}|{:<10}|{:<10}".format(time, round(xyz[a][1][time], 2), round(xyz[b][1][time], 2), round(xyz[c][1][time], 2)))
-#     print("{:<10}|{:<10}|{:<10}|{:<10}".format("  ", round(xyz[a][2][time], 2), round(xyz[b][2][time], 2), round(xyz[c][2][time], 2)))
-#     print("{:-<10}+{:-<10}+{:-<10}+{:-<10}".format("-", "-", "-", "-"))
-#     print("{:<10}|{:<10}|{:<10}|{:<10}".format(round(xyz[i][0][time], 2), "", "", ""))
-#     print("{:<10}|{:<10}|{:<10}|{:<10}".format(round(xyz[i][1][time], 2), "", "", ""))
-#     print("{:<10}|{:<10}|{:<10}|{:<10}".format(round(xyz[i][2][time], 2), "", "", ""))
-#     print("{:-<10}+{:-<10}+{:-<10}+{:-<10}".format("-", "-", "-", "-"))
-#     print("{:<10}|{:<10}|{:<10}|{:<10}".format(round(xyz[i][0][time], 2), "", "", ""))
-#     print("{:<10}|{:<10}|{:<10}|{:<10}".format(round(xyz[i][0][time], 2), "", "", ""))
-#     print("{:<10}|{:<10}|{:<10}|{:<10}".format(round(xyz[i][0][time], 2), "", "", ""))
-#
-#     print("")
-
-# for satellite in range(1, int(numOfSat)):
-#     for time in range(1, int(duration/resolution)):
-#         x1 = int(xyz[satellite][0][time])
-#         x2 = int(xyz[satellite-1][0][time])
-#         y1 = int(xyz[satellite][1][time])
-#         y2 = int(xyz[satellite-1][1][time])
-#         z1 = int(xyz[satellite][2][time])
-#         z2 = int(xyz[satellite-1][2][time])
-#         a = int(x1 - x2)
-#         b = int(y2 - y1)
-#         c = int(z1 - z2)
-#         print("{:<5}|{:<7}|{:<7}|{:<7}".format(time, x1, y1, z1))
-#         print("{:<5}|{:<7}|{:<7}|{:<7}".format(time, x2, y2, z2))
-#         print("{:<5}|{:<7}|{:<7}|{:<7}|{:<7}".format("",a ,b , c, a+b+c))
-#         print("")
-#         abc.append(a + b + c)
-#
-#         if a + b + c < 20 and a + b + c > -20:
-#             print("ALERT, COLLISON -------------------------------------------")
-#
-#     print("########## ########## ##########")
-
 # for i in range(0, int(numOfSat)):
     # plot(xyz[i][0], '-ro')
     # plot(xyz[i][1], '-go')
