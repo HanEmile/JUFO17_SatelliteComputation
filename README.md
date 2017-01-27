@@ -1,8 +1,14 @@
 # SatelliteComputation
 
 **Blender Required !!!**
+## Required Packages
+- bpy
+- pylab(matplotlib)
+- urllib
+- math
+- numpy
 
-Start software like this:
+## Running
 
     blender --python main.py
 
