@@ -88,14 +88,14 @@ start = timer()
 
 # controll values
 category = "iridium"
-globalScale = 16
+globalScale = 1
 satSize = 0.5
 orbitSubDivs = 256
-resolution = 100        # get poition of sat each x frames
+resolution = 100        # get position of sat each x frames
 threshold = 0.001
 
 # if internet connection available:
-# TLE.download(category)
+TLE.download(category)
 
 # define
 sce = bpy.context.scene
@@ -150,8 +150,6 @@ for i in range(0, numOfSat):
     # define apogee and perigee
     apogee = abs(semimajoraxis * (1 + e0) - earthRadius)
     perigee = abs(semimajoraxis * (1 - e0) - earthRadius)
-
-
 
     # print values to user
 
@@ -277,55 +275,72 @@ plt.show()
 # p. 8 - 11
 
 # create an array filled with 0
-# array[y, x]
+# array[t, y, x]
 
 dure = int(duration/resolution)
 # dure = 5
-array = np.zeros((dure, numOfSat + 3, numOfSat + 3))
+array = np.zeros((int(dure), numOfSat + 3, numOfSat + 3))
 
 satNr = 1
 
 print(dure)
 
 # for every moment in time
-# for time in range(0, dure, 1):
-#     x = 0
-#     y = 0
-#
-#     # fill position values
-#     for a in range(3, (numOfSat + 3), 1):
-#         array[time, y+0, a] = round(xyz[a][0][time], 0)
-#         array[time, y+1, a] = round(xyz[a][1][time], 0)
-#         array[time, y+2, a] = round(xyz[a][2][time], 0)
-#
-#     # fill position values
-#     for b in range(3, (numOfSat + 3), 1):
-#         array[time, b, x+0] = round(xyz[b][0][time], 0)
-#         array[time, b, x+1] = round(xyz[b][1][time], 0)
-#         array[time, b, x+2] = round(xyz[b][2][time], 0)
-#
-#     # loop through array
-#     for y in range(3, (numOfSat + 3), 1):
-#         for x in range(3, (numOfSat + 3), 1):
-#
-#             # 1 0 0
-#             # 0 1 0
-#             # 0 0 1
-#             # don't calculate ones
-#             if x != y:
-#                 a = pow((abs(array[time, 0, x])-abs(array[time, y, 0])), 2)
-#                 b = pow((abs(array[time, 1, x])-abs(array[time, y, 1])), 2)
-#                 c = pow((abs(array[time, 2, x])-abs(array[time, y, 2])), 2)
-#
-#                 d = round(math.sqrt(a + b + c), 0)
-#                 array[time, y, x] = d
-#
-#                 # print Warning
-#                 if d < threshold:
-#                     xname = TLE.get("name", category, x-3)
-#                     yname = TLE.get("name", category, y-3)
-#
-#                     print("{:<10}{:<20}{:<20}".format("BUMMM", xname, yname))
+for time in range(0, dure, 1):
+    x = 0
+    y = 0
+
+    for sat in range(0, numOfSat, 1):
+        array[time, y+0, sat+3] = xyz[sat][0][time]
+        array[time, y+1, sat+3] = xyz[sat][1][time]
+        array[time, y+2, sat+3] = xyz[sat][2][time]
+
+    for sat in range(0, numOfSat, 1):
+        array[time, sat+3, y+0] = xyz[sat][0][time]
+        array[time, sat+3, y+1] = xyz[sat][1][time]
+        array[time, sat+3, y+2] = xyz[sat][2][time]
+
+    # loop through array
+
+
+    for y in range(3, (numOfSat + 3), 1):
+        for x in range(3, (numOfSat + 3), 1):
+            if x != y:
+                a_x = array[time, 0, x]
+                a_y = array[time, 1, x]
+                a_z = array[time, 2, x]
+
+                b_x = array[time, y, 0]
+                b_y = array[time, y, 1]
+                b_z = array[time, y, 2]
+
+                a = pow((abs(a_x)-abs(b_x)), 2)
+                b = pow((abs(a_y)-abs(b_y)), 2)
+                c = pow((abs(a_z)-abs(b_z)), 2)
+
+                d = math.sqrt(a + b + c)
+                array[time, y, x] = d
+
+                # print Warning
+                if d < threshold:
+                    xname = TLE.get("name", category, x-3)
+                    yname = TLE.get("name", category, y-3)
+
+                    a_x = array[time, 0, x]
+                    a_y = array[time, 1, x]
+                    a_z = array[time, 2, x]
+
+                    b_x = array[time, y, 0]
+                    b_y = array[time, y, 1]
+                    b_z = array[time, y, 2]
+
+                    print("")
+                    print("BUM !!!")
+                    print("{:<20}{:<20}{:<10}{:<20}".format("sat A", "sat B", "time", "distance"))
+                    print("")
+                    print("{:<20}{:<20}{:<10}{:<20}".format(xname, yname, time, d))
+                    print("{:<30}{:<30}{:<30}".format(a_x, a_y, a_z))
+                    print("{:<30}{:<30}{:<30}".format(b_x, b_y, b_z))
 
 # print horizontal "line"
 print("{:#<80}".format("#"))
@@ -334,4 +349,5 @@ print(array)
 
 end = timer()
 
-print(end - start)
+print("")
+print("{:<10}{:<10}".format("Total duration (sek.): ", end - start))
