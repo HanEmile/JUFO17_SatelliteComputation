@@ -86,7 +86,7 @@ class TLE:
 
 # controll
 createSatellite = True
-category = "iridium"
+category = "dummy"
 #TLE.download(category)
 
 # define
@@ -256,7 +256,7 @@ for i in range(0, numOfSat):
     sat.select = True
 
     # get location each x frames (higher -> quicker)
-    resolution = 5000
+    resolution = 10
 
     # delete old lists
     del lia_x[:]
@@ -324,77 +324,83 @@ for i in range(0, numOfSat):
 print("{:#<80}".format("#"))
 
 # create array filled with zeros
-array = np.zeros((numOfSat, numOfSat))
+array = np.zeros((numOfSat + 3, numOfSat + 3))
 # array = np.zeros((10, 10))
 
 # define
-t = 0
+t = 1
 satNr = 1
 
-print(xyz[satNr][0][t])
-print(xyz[satNr][1][t])
-print(xyz[satNr][2][t])
+for t in range(0, 10, 1):
 
-# horizontal define:
-y = 0
-# for x in range(3, 10, 1):
-for x in range(3, numOfSat, 1):
-    array[y+0, x] = round(xyz[x-3][0][t], 1)
-    array[y+1, x] = round(xyz[x-3][1][t], 1)
-    array[y+2, x] = round(xyz[x-3][2][t], 1)
+    print(xyz[satNr][0][t])
+    print(xyz[satNr][1][t])
+    print(xyz[satNr][2][t])
+    print(numOfSat)
 
-# vertical define:
-x = 0
-# for y in range(3, 10, 1):
-for y in range(3, numOfSat, 1):
-    array[y, x+0] = round(xyz[y-3][0][t], 1)
-    array[y, x+1] = round(xyz[y-3][1][t], 1)
-    array[y, x+2] = round(xyz[y-3][2][t], 1)
+    # horizontal define:
+    y = 0
+    # for x in range(3, 10, 1):
+    for x in range(3, numOfSat + 3, 1):
+        array[y+0, x] = round(xyz[x-3][0][t], 1)
+        array[y+1, x] = round(xyz[x-3][1][t], 1)
+        array[y+2, x] = round(xyz[x-3][2][t], 1)
 
-# for x in range(3, 10, 1):
-#     for y in range(3, 10, 1):
-for x in range(3, numOfSat, 1):
-    for y in range(3, numOfSat, 1):
-        print("{:-<10}".format("-"))
-        print(x, y)
-        print("")
-        a = array[0, x]
-        b = array[1, x]
-        c = array[2, x]
-        print("{:<20}{:<20}{:<20}".format(a, b, c))
+    print("")
+    print(array)
+    print("")
 
-        d = array[y, 0]
-        e = array[y, 1]
-        f = array[y, 2]
-        print("{:<20}{:<20}{:<20}".format(d, e, f))
+    # vertical define:
+    x = 0
+    # for y in range(3, 10, 1):
+    for y in range(3, numOfSat + 3, 1):
+        array[y, x+0] = round(xyz[y-3][0][t], 1)
+        array[y, x+1] = round(xyz[y-3][1][t], 1)
+        array[y, x+2] = round(xyz[y-3][2][t], 1)
 
-        g = pow(abs(a - d), 2)
-        h = pow(abs(b - e), 2)
-        i = pow(abs(c - f), 2)
-        print("{:<20}{:<20}{:<20}".format(g, h, i))
+    print(array)
+    print("")
 
-        # j = math.sqrt(g)
-        # k = math.sqrt(h)
-        # l = math.sqrt(i)
-        # print("{:<20}{:<20}{:<20}".format(j, k, l))
-        #
-        # m = j + k + l
-        m = round(math.sqrt(g + h + i), 1)
-        print(m)
-        array[x, y] = m
+    for x in range(3, numOfSat + 3, 1):
+        for y in range(3, numOfSat + 3, 1):
+    # for x in range(3, numOfSa, 1):
+        # for y in range(3, numOfSat, 1):
+            # print("{:-<10}".format("-"))
+            # print(x, y)
+            # print("")
+            a = array[0, x]
+            b = array[1, x]
+            c = array[2, x]
+            # print("{:<20}{:<20}{:<20}".format(a, b, c))
 
-print("")
-print(array)
+            d = array[y, 0]
+            e = array[y, 1]
+            f = array[y, 2]
+            # print("{:<20}{:<20}{:<20}".format(d, e, f))
 
-# for i in range(0, int(numOfSat)):
-    # plot(xyz[i][0], '-ro')
-    # plot(xyz[i][1], '-go')
-    # plot(xyz[i][2], '-bo')
+            g = pow(abs(a - d), 2)
+            h = pow(abs(b - e), 2)
+            i = pow(abs(c - f), 2)
+            # print("{:<20}{:<20}{:<20}".format(g, h, i))
+
+            # j = math.sqrt(g)
+            # k = math.sqrt(h)
+            # l = math.sqrt(i)
+            # print("{:<20}{:<20}{:<20}".format(j, k, l))
+            #
+            # m = j + k + l
+            m = round(math.sqrt(g + h + i), 1)
+            # print(m)
+            array[x, y] = m
+
+    print("")
+    print(array)
+
+for i in range(0, int(numOfSat)):
+    plot(xyz[i][0], '-ro')
+    plot(xyz[i][1], '-go')
+    plot(xyz[i][2], '-bo')
     # plot(abc, '-ko')
-
-print("###")
-print(numOfSat)
-print("###")
 
 for x in range(3, numOfSat, 1):
     for y in range(3, numOfSat, 1):
