@@ -12,6 +12,7 @@ class TLE{
   public:
     void get_data(int, int, int);
     void download();
+    void write_fifo_1(int);
 };
 
 void TLE::get_data(int value, int category, int satNr){
@@ -28,6 +29,7 @@ void TLE::get_data(int value, int category, int satNr){
         std::getline(file, line);
     }
 
+    // get value
     if(value == 1){
       std::getline(file, line);
       for(int i = 0; i < 24; i++){
@@ -268,10 +270,17 @@ int main(){
   // system("ls -l");
   // system("python3 download_data.py");
 
+  int category = 1;
+
+
   TLE sat;
   // sat.download();
-  sat.get_data(19, 1, 2);
+
+  data = sat.get_data(19, 1, 2);
+  sat.write_fifo_1(data);
+
   std::cout << std::endl;
+  system("python3");
 
   return 0;
 }
