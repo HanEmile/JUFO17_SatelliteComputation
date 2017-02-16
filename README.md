@@ -25,26 +25,32 @@ Download data from a specific category:
      example:
      TLE.download("iridium")
 
-Get number of satellites in category:
+### Get number of satellites in category:
 
      TLE.numOfSat(category)
 
      example:
      TLE.numOfSat("noaa")
 
-Print specific TLE:
+### Print specific TLE:
 
      TLE.printTLE(category, satNr)
 
      example:
 
-Get value from sat in category:
+### Get value from sat in category:
 
      TLE.get(value, category, satNr)
 
      example:
      TLE.get("inclination", "argos", 3)
 
-xyz list:
+### xyz list:
 
     xyz[satNr][x/y/z][time]
+
+so:
+
+    xyt[1][1][1]
+
+gets the y-position of satellite 1 at the moment "1" 
