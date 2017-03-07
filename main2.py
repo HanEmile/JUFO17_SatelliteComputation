@@ -114,6 +114,10 @@ xyz = list( [[], [], []] for _ in range(0, numOfSat) )
 bpy.ops.object.select_all(action='SELECT')
 bpy.ops.object.delete(use_global=False)
 
+# add earth model (sphere)
+bpy.ops.mesh.primitive_uv_sphere_add(size=1, location=(0, 0, 0))
+bpy.ops.object.subdivision_set(level=4)
+
 # cycle through every satellite in one category
 for i in range(0, numOfSat):
 
@@ -151,7 +155,7 @@ for i in range(0, numOfSat):
     apogee = abs(semimajoraxis * (1 + e0) - earthRadius)
     perigee = abs(semimajoraxis * (1 - e0) - earthRadius)
 
-    # print values to user
+    # print important values
 
     print("")
 
@@ -185,17 +189,9 @@ for i in range(0, numOfSat):
 
     print("")
 
-    # blender
-    # Creating th Satellites in blender
-    # Add orbit
-    # Add Satellite to orbit
-    # Transform orbit
-    # Get Values
-
-    # define
+    # define names
     orbitname = name
     satname = name + "sat"
-
 
     # add orbit, rename orbit
     bpy.ops.mesh.primitive_circle_add(radius=1, vertices=orbitSubDivs)
@@ -216,7 +212,7 @@ for i in range(0, numOfSat):
     bpy.ops.object.convert(target='CURVE')
 
     # set orbit duration
-    # bpy.data.curves[name].path_duration = duration
+    bpy.data.curves[name].path_duration = duration
 
     # resize orbit
     orbit.scale[0] = apogee
