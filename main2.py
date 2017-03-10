@@ -87,7 +87,7 @@ class TLE:
 start = timer()
 
 # controll values
-category = "iridium"
+category = "argos"
 globalScale = 1
 satSize = 0.5
 orbitSubDivs = 256
@@ -95,7 +95,7 @@ resolution = 100        # get position of sat each x frames
 threshold = 0.001
 
 # if internet connection available:
-TLE.download(category)
+# TLE.download(category)
 
 # define
 sce = bpy.context.scene
