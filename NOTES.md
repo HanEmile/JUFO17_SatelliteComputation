@@ -3,12 +3,12 @@
 ## TODO:
 
 - speed
-- Kugelkoordinatensysteme (räumliche Polarkoordinaten)
+- Kugelkoordinatensysteme (Sphere)
   * helferklasese
 
 ## Notes:
 
-# Umrechnung kartesian - polar
+# Umrechnung Cartesian - Sphere
 
 koordinatentripel (r, theta, phi)
 

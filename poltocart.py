@@ -1,22 +1,16 @@
 # import
-import math
 import numpy as np
 import matplotlib.pyplot as plt
-
-# pol[x, y, z]
-x = 1
-y = 2
-z = 3
-pol = [x, y, z]
 
 # define r, theta, phi
 r = 0
 theta = 0
 phi = 0
-kart = [0, 0, 0]
+cart = [r, theta, phi]
 
-def poltokart(pol):
-    # split up list
+def poltocart(pol):
+    print(pol)
+
     x = pol[0]
     y = pol[1]
     z = pol[2]
@@ -25,28 +19,23 @@ def poltokart(pol):
     r = np.sqrt(np.power(x, 2) + np.power(y, 2) + np.power(z, 2))
 
     # theta
-    a = np.sqrt(x^2 + y^2 + z^2)
-    b = ((z) / a)
-    b = b * math.pi / 180
-    theta = np.arccos(b)
+    theta = np.arccos( z / r )
 
     # phi
     if x > 0:
         phi = np.arctan(y/x)
     elif x == 0:
-        phi = np.sign(y)*(math.pi/2)
+        phi = np.sign(y)*(np.pi/2)
     elif x < 0 and y >= 0:
         phi = np.arctan(y/x) + math.pi
     elif x < 0 and y < 0:
         phi = np.arctan(y/x) - math.pi
 
     # write to cartesian list
-    kart[0] = r
-    kart[1] = theta
-    kart[2] = phi
+    cart[0] = r
+    cart[1] = theta
+    cart[2] = phi
 
-# run
-poltokart(pol)
+    return cart
 
-print("{:<15}{:<60}".format("polar:", str(pol) ))
-print("{:<15}{:<60}".format("cartesian:", str(kart) ))
+poltocart([4, 3, 5])

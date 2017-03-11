@@ -6,6 +6,10 @@ import math
 import numpy as np
 from timeit import default_timer as timer
 
+# import helper-modules
+# convert ploar to cartesian koordinates:
+import poltocart as ptc
+
 class TLE:
     def get(value, category, satNr):
         with open('TLE/' + category + '.txt') as data:
