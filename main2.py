@@ -88,196 +88,196 @@ class TLE:
             print(content[((satNr)*3)+1], end="")
             print(content[((satNr)*3)+2], end="")
 
-start = timer()
+run_x_times = 10000
+timer_list = list()
 
-# controll values
-category = "dummy"
-globalScale = 1
-satSize = 0.5
-orbitSubDivs = 256
-resolution = 1        # get position of sat each x frames
-threshold = 0.1
+start_all = timer()
 
-# if internet connection available:
-# TLE.download(category)
+for value_mult in range(0, run_x_times, 1):
 
-# define
-sce = bpy.context.scene
-n = TLE.numOfSat(category)
-numOfSat = TLE.numOfSat(category)
-rotate = bpy.ops.transform.rotate
+    start = timer()
 
-# static
-earthRadius = 6371
-daylengthsec = 86400
+    # controll values
+    category = "dummy"
+    globalScale = 1
+    satSize = 0.5
+    orbitSubDivs = 256
+    resolution = 5000      # get position of sat each x frames
+    threshold = 0.1
 
-# create list
-xyz = list( [[], [], []] for _ in range(0, numOfSat) )
-
-# select all -> delete
-bpy.ops.object.select_all(action='SELECT')
-bpy.ops.object.delete(use_global=False)
-
-# add earth model (sphere)
-bpy.ops.mesh.primitive_uv_sphere_add(size=1, location=(0, 0, 0))
-bpy.ops.object.subdivision_set(level=4)
-
-# cycle through every satellite in one category
-for i in range(0, numOfSat):
+    # if internet connection available:
+    # TLE.download(category)
 
     # define
-    satNr = i
-    name = TLE.get("name", category, satNr).rstrip("\n")
+    sce = bpy.context.scene
+    n = TLE.numOfSat(category)
+    numOfSat = TLE.numOfSat(category)
+    rotate = bpy.ops.transform.rotate
 
-    # get inclination and convert
-    inc_deg = float(TLE.get("Inclination", category, satNr))
-    inc_rad = inc_deg / 180 * math.pi
+    # static
+    earthRadius = 6371
+    daylengthsec = 86400
 
-    # get RAAN and convert
-    RAAN_deg = float(TLE.get("RAAN", category, satNr))
-    RAAN_rad = RAAN_deg * math.pi / 180
+    # create list
+    xyz = list( [[], [], []] for _ in range(0, numOfSat) )
 
-    # get AoP and convert
-    AoP_deg = float(TLE.get("ArgumentOfPerigee", category, satNr))
-    AoP_rad = AoP_deg * math.pi / 180
+    # select all -> delete
+    bpy.ops.object.select_all(action='SELECT')
+    bpy.ops.object.delete(use_global=False)
 
-    # get Mean Motion
-    n0 = float(TLE.get("MeanMotion", category, satNr))
+    # add earth model (sphere)
+    bpy.ops.mesh.primitive_uv_sphere_add(size=1, location=(0, 0, 0))
+    bpy.ops.object.subdivision_set(level=4)
 
-    # define duration (time for one rotation around earth)
-    duration = int(daylengthsec / n0)
+    # cycle through every satellite in one category
+    for i in range(0, numOfSat):
 
-    # calculate apogee / perigee
-    semimajoraxis = ((6.6228 / pow(n0, 2/3)) * earthRadius)
-    orbitheight = semimajoraxis - earthRadius
+        # define
+        satNr = i
+        name = TLE.get("name", category, satNr).rstrip("\n")
 
-    # calculate Eccentricity and convert ("decimal point assumed")
-    e0_a = str(TLE.get("Eccentricity", category, satNr))
-    e0 = float("0." + e0_a)
+        # get inclination and convert
+        inc_deg = float(TLE.get("Inclination", category, satNr))
+        inc_rad = inc_deg / 180 * math.pi
 
-    # define apogee and perigee
-    apogee = abs(semimajoraxis * (1 + e0) - earthRadius)
-    perigee = abs(semimajoraxis * (1 - e0) - earthRadius)
+        # get RAAN and convert
+        RAAN_deg = float(TLE.get("RAAN", category, satNr))
+        RAAN_rad = RAAN_deg * math.pi / 180
 
-    # print important values
+        # get AoP and convert
+        AoP_deg = float(TLE.get("ArgumentOfPerigee", category, satNr))
+        AoP_rad = AoP_deg * math.pi / 180
 
-    print("")
+        # get Mean Motion
+        n0 = float(TLE.get("MeanMotion", category, satNr))
 
-    print("{:<10}{:<80}".format("name:", name))
-    print("{:<4}/{:<4}".format(i, numOfSat))
+        # define duration (time for one rotation around earth)
+        duration = int(daylengthsec / n0)
 
-    print("{:<1}{:<5}{:<1}{:<40}{:<1}{:<40}".format("|", "", "|", "deg", "|", "rad"))
+        # calculate apogee / perigee
+        semimajoraxis = ((6.6228 / pow(n0, 2/3)) * earthRadius)
+        orbitheight = semimajoraxis - earthRadius
 
-    print("{:+<1}{:-<5}{:+<1}{:-<40}{:+<1}{:-<40}".format("+", "-", "+", "-", "+", "-"))
+        # calculate Eccentricity and convert ("decimal point assumed")
+        e0_a = str(TLE.get("Eccentricity", category, satNr))
+        e0 = float("0." + e0_a)
 
-    print("{:<1}{:<5}{:<1}{:<40}{:<1}{:<40}".format("|", "inc", "|", str(inc_deg), "|", str(inc_rad)))
-    print("{:<1}{:<5}{:<1}{:<40}{:<1}{:<40}".format("|", "RAAN", "|", str(RAAN_deg), "|", str(RAAN_rad)))
-    print("{:<1}{:<5}{:<1}{:<40}{:<1}{:<40}".format("|", "AoP", "|", str(AoP_deg), "|", str(AoP_rad)))
+        # define apogee and perigee
+        apogee = abs(semimajoraxis * (1 + e0) - earthRadius)
+        perigee = abs(semimajoraxis * (1 - e0) - earthRadius)
 
-    print("{:+<1}{:-<5}{:+<1}{:-<40}{:+<1}{:-<40}".format("+", "-", "+", "-", "+", "-"))
-    print("")
-    print("{:+<1}{:-<5}{:+<1}{:-<40}{:+<1}{:-<40}".format("+", "-", "+", "-", "+", "-"))
+        # print important values
 
+        # print("")
+        #
+        # print("{:<10}{:<80}".format("name:", name))
+        # print("{:<4}/{:<4}".format(i, numOfSat))
+        print((value_mult / run_x_times)*100)
 
-    print("{:<1}{:<5}{:<1}{:<40}{:<1}{:<40}".format("|", "smi", "|", str(semimajoraxis), "|", ""))
+        # TLE.printTLE(category, satNr)
 
-    print("{:+<1}{:-<5}{:+<1}{:-<40}{:+<1}{:-<40}".format("+", "-", "+", "-", "+", "-"))
+        # print("")
 
-    print("{:<1}{:<5}{:<1}{:<40}{:<1}{:<40}".format("|", "Apo", "|", str(apogee), "|", ""))
-    print("{:<1}{:<5}{:<1}{:<40}{:<1}{:<40}".format("|", "Per", "|", str(perigee), "|", ""))
-    print("{:<1}{:<5}{:<1}{:<40}{:<1}{:<40}".format("|", "e0", "|", str(e0), "|", ""))
+        # define names
+        orbitname = name
+        satname = name + "sat"
 
-    print("{:+<1}{:-<5}{:+<1}{:-<40}{:+<1}{:-<40}".format("+", "-", "+", "-", "+", "-"))
+        # add orbit, rename orbit
+        bpy.ops.mesh.primitive_circle_add(radius=1, vertices=orbitSubDivs)
+        bpy.context.object.name = orbitname
 
-    TLE.printTLE(category, satNr)
+        # add sat, rename sat
+        bpy.ops.mesh.primitive_cube_add(radius=satSize)
+        bpy.context.object.name = satname
 
-    print("")
+        # define object names
+        orbit = bpy.context.scene.objects[name]
+        sat = bpy.context.scene.objects[name + "sat"]
 
-    # define names
-    orbitname = name
-    satname = name + "sat"
+        # convert orbit to curve and attach sat
+        sat.select = False
+        orbit.select = True
+        sce.objects.active = orbit
+        bpy.ops.object.convert(target='CURVE')
 
-    # add orbit, rename orbit
-    bpy.ops.mesh.primitive_circle_add(radius=1, vertices=orbitSubDivs)
-    bpy.context.object.name = orbitname
+        # set orbit duration
+        bpy.data.curves[name].path_duration = duration
 
-    # add sat, rename sat
-    bpy.ops.mesh.primitive_cube_add(radius=satSize)
-    bpy.context.object.name = satname
+        # resize orbit
+        orbit.scale[0] = apogee
+        orbit.scale[1] = perigee
 
-    # define object names
-    orbit = bpy.context.scene.objects[name]
-    sat = bpy.context.scene.objects[name + "sat"]
+        # move sat to perigee
+        sat.location[1] = perigee
 
-    # convert orbit to curve and attach sat
-    sat.select = False
-    orbit.select = True
-    sce.objects.active = orbit
-    bpy.ops.object.convert(target='CURVE')
+        # make sat follow orbit
+        sat.select = True
+        sce.objects.active = orbit
+        bpy.ops.object.parent_set(type='FOLLOW')
 
-    # set orbit duration
-    bpy.data.curves[name].path_duration = duration
+        # set duration for 1 revolution
+        bpy.data.curves[orbitname].path_duration = duration
 
-    # resize orbit
-    orbit.scale[0] = apogee
-    orbit.scale[1] = perigee
+        # rotate orbit
+        orbit.select = True
 
-    # move sat to perigee
-    sat.location[1] = perigee
+        rotate(value=RAAN_rad, axis=(0, 0, 1))
+        rotate(value=inc_rad, axis=(1, 0, 0))
+        rotate(value=AoP_rad, axis=(0, 0, 1))
 
-    # make sat follow orbit
-    sat.select = True
-    sce.objects.active = orbit
-    bpy.ops.object.parent_set(type='FOLLOW')
+        # Getting the position of a satellite:
+        # 1. jump to specific frame
+        # 2. clear parent (keep transform)
+        # 3. get position value and append it to a list
+        # 4. reset parent
 
-    # set duration for 1 revolution
-    bpy.data.curves[orbitname].path_duration = duration
+        for t in range(0, duration, resolution):
+            # jump to frame
+            sce.frame_set(t)
 
-    # rotate orbit
-    orbit.select = True
+            # clear parent
+            bpy.ops.object.parent_clear(type='CLEAR_KEEP_TRANSFORM')
 
-    rotate(value=RAAN_rad, axis=(0, 0, 1))
-    rotate(value=inc_rad, axis=(1, 0, 0))
-    rotate(value=AoP_rad, axis=(0, 0, 1))
+            # append sat location to list xyz
+            xyz[satNr][0].append(sat.location[0])
+            xyz[satNr][1].append(sat.location[1])
+            xyz[satNr][2].append(sat.location[2])
 
-    # Getting the position of a satellite:
-    # 1. jump to specific frame
-    # 2. clear parent (keep transform)
-    # 3. get position value and append it to a list
-    # 4. reset parent
+            # reset parent
+            bpy.ops.object.parent_set(type="FOLLOW")
 
-    for t in range(0, duration, resolution):
-        # jump to frame
-        sce.frame_set(t)
+    # end timer -> print runtime
+    end = timer()
 
-        # clear parent
-        bpy.ops.object.parent_clear(type='CLEAR_KEEP_TRANSFORM')
+    # plot x, y and z values ove every satellite for every moment
+    # for i in range(0, numOfSat, 1):
+    #     plt.plot(xyz[i][0], '-ro')
+    #     plt.plot(xyz[i][1], '-go')
+    #     plt.plot(xyz[i][2], '-bo')
+    #
+    # plt.show()
 
-        # append sat location to list xyz
-        xyz[satNr][0].append(sat.location[0])
-        xyz[satNr][1].append(sat.location[1])
-        xyz[satNr][2].append(sat.location[2])
+    # Collision Detect
+    # https://hanemile.github.io/docs/master.pdf
+    # p. 8 - 11
 
-        # reset parent
-        bpy.ops.object.parent_set(type="FOLLOW")
+    # create an array filled with 0
+    # array[t, y, x]
 
+    # print("")
+    # print("{:<10}{:<10}".format("Total duration (sek.): ", end - start))
 
-# plot x, y and z values ove every satellite for every moment
-for i in range(0, numOfSat, 1):
-    plt.plot(xyz[i][0], '-ro')
-    plt.plot(xyz[i][1], '-go')
-    plt.plot(xyz[i][2], '-bo')
+    timer_list.append(end - start)
 
+# print all timer values
+print(timer_list)
+
+# plot the timer_list and show it
+plt.plot(timer_list, '-ro')
 plt.show()
 
-# Collision Detect
-# https://hanemile.github.io/docs/master.pdf
-# p. 8 - 11
+end_all = timer()
+duration_all = start_all - end_all
+print(duration_all)
 
-# create an array filled with 0
-# array[t, y, x]
-
-end = timer()
-
-print("")
-print("{:<10}{:<10}".format("Total duration (sek.): ", end - start))
+plt.savefig('x10000_res100.png')

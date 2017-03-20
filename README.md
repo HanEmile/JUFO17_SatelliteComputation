@@ -10,12 +10,12 @@
 
 ## Running
 
-    blender --python main.py
+    blender startup.blend --python main2.py
 
 If you don't want to start blender and only want to get the raw data
 (console + matplotlib) start like this:
 
-    blender --python main.py --background
+    blender startup.blend --python main2.py --background
 
 ## code:
 Download data from a specific category:
@@ -53,4 +53,4 @@ so:
 
     xyt[1][1][1]
 
-gets the y-position of satellite 1 at the moment "1" 
+gets the y-position of satellite 1 at the moment "1"
